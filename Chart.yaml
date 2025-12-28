@@ -1,0 +1,27 @@
+annotations:
+  category: DeveloperTools
+  artifacthub.io/images: |
+    - name: %%COMPONENT_NAME%%
+      image: docker.io/%%COMPONENT_NAME%%:1.21.0
+  artifacthub.io/license: MIT
+name: %%COMPONENT_NAME%%
+apiVersion: v2
+appVersion: 1.21.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: ""
+home: https://lab.frogg.it/doca/%%COMPONENT_NAME%%-helm
+icon: ""
+keywords:
+  - %%COMPONENT_NAME%%
+maintainers:
+  - name: Benoît Pourre
+    email: benoit.pourre@gmail.com
+    url: https://github.com/captnbp
+sources:
+  - https://lab.frogg.it/doca/%%COMPONENT_NAME%%-helm
+version: 0.3.0
