@@ -1,0 +1,108 @@
+{{- if .Values.networkPolicy.%%COMPONENT_NAME%%.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: %%COMPONENT_NAME%%
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: %%COMPONENT_NAME%%
+  policyTypes:
+    {{- range .Values.networkPolicy.%%COMPONENT_NAME%%.policyTypes }}
+    - {{ . }}
+    {{- end }}
+  {{- if has "Ingress" .Values.networkPolicy.%%COMPONENT_NAME%%.policyTypes }}
+  ingress:
+    {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.enabled }}
+    # Allow traffic from Ingress Controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.namespaceSelector }}
+              {{ $key }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.podSelector }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.podSelector }}
+              {{ $key }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.containerPorts.http }}
+    {{- end }}
+    {{- if and .Values.metrics.enabled .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.enabled }}
+    # Allow traffic from monitoring namespace
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.namespaceSelector }}
+              {{ $key }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.podSelector }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.podSelector }}
+              {{ $key }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.containerPorts.http }}
+    {{- end }}
+  {{- end }}
+  {{- if has "Egress" .Values.networkPolicy.%%COMPONENT_NAME%%.policyTypes }}
+  egress:
+    {{- if and .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toPostgresql.enabled .Values.postgresql.enabled }}
+    # Allow traffic to PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: {{ include "%%COMPONENT_NAME%%.cnp.fullname" . }}
+              app.kubernetes.io/component: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    {{- end }}
+    {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toDNS.enabled }}
+    # Allow traffic to DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    {{- end }}
+    {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled }}
+    # Allow traffic to SMTP servers
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        {{- range .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports }}
+        - protocol: TCP
+          port: {{ . }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled }}
+    # Allow traffic to Internet (HTTPS/HTTP)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+    {{- end }}
+  {{- end }}
+{{- end }}

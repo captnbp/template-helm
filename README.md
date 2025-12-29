@@ -69,7 +69,7 @@ $ helm delete --purge my-release
 | Name                 | Description                                                                 | Value             |
 | -------------------- | --------------------------------------------------------------------------- | ----------------- |
 | `image.registry`     | %%COMPONENT_NAME%% image registry                                                        | `docker.io`       |
-| `image.repository`   | %%COMPONENT_NAME%% image repository                                                      | `hashicorp/%%COMPONENT_NAME%%` |
+| `image.repository`   | %%COMPONENT_NAME%% image repository                                                      | `%%COMPONENT_NAME%%` |
 | `image.tag`          | %%COMPONENT_NAME%% image tag (immutable tags are recommended)                            | `1.21.0`          |
 | `image.pullPolicy`   | Image pull policy                                                           | `IfNotPresent`    |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]`              |

@@ -583,6 +583,9 @@ tls:
   ## Base subject details for certificate generation, node_dn filtering, admin_dn 
   ##
   subject:
+    ## @param tls.subject.organizationalUnits Subject's organizational units
+    ##
+    organizationalUnits: "%%COMPONENT_NAME%%"
     ## @param tls.subject.organizations Subject's organization
     ##
     organizations: "%%COMPONENT_NAME%%"
@@ -606,13 +609,13 @@ tls:
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
-  enabled: false
+  enabled: true
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
     ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
     ##
-    enabled: false
+    enabled: true
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
@@ -652,3 +655,286 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
+
+## @section Database parameters
+
+## CloudNativePG Cluster configuration
+## Requires CloudNativePG operator to be pre-installed
+## ref: https://cloudnative-pg.io/
+## @param postgresql.enabled Enable CloudNativePG cluster deployment
+## @param postgresql.instances Number of PostgreSQL instances (1 for single instance)
+## @param postgresql.parameters [object] Postgresql parameters
+## @param postgresql.storage.size Storage size for PostgreSQL data
+## @param postgresql.storage.storageClass Storage class for PostgreSQL PVCs
+## @param postgresql.storage.pvcTemplate Additional PVC template configuration for PostgreSQL PVCs
+## @param postgresql.database.name Database name
+## @param postgresql.database.username Database username
+## @param postgresql.database.existingSecret Existing secret with database credentials
+## @param postgresql.resources Resource requests and limits for PostgreSQL pod
+## @param postgresql.affinity Affinity configuration for PostgreSQL pod
+## @param postgresql.tolerations Tolerations for PostgreSQL pod
+## @param postgresql.nodeSelector Node selector for PostgreSQL pod
+## @param postgresql.monitoring.enabled Enable monitoring with PodMonitor
+## @param postgresql.backup.enabled Enable Barman plugin WAL backup configuration
+## ref: https://cloudnative-pg.io/plugin-barman-cloud/docs/usage/
+## @param postgresql.backup.barmanObjectName Barman ObjectStore name for backup
+## ref: https://cloudnative-pg.io/plugin-barman-cloud/docs/object_stores/
+## @param postgresql.superuserSecret Secret containing superuser credentials for the cluster
+## @param postgresql.tls.enabled Enable TLS encryption for the cluster (requires cert-manager)
+## ref: https://cloudnative-pg.io/documentation/current/certificates/#server-tls-secret
+##
+postgresql:
+  enabled: false
+  instances: 1
+  parameters:
+      max_connections: "100"
+      shared_buffers: "256MB"
+  storage:
+    size: 10Gi
+    storageClass: ""
+    pvcTemplate: {}
+  database:
+    name: %%COMPONENT_NAME%%
+    username: %%COMPONENT_NAME%%
+    existingSecret: ""
+  resources: {}
+  affinity: {}
+  tolerations: {}
+  nodeSelector: {}
+  monitoring:
+    enabled: true
+  backup:
+    enabled: false
+    barmanObjectName: ""
+  superuserSecret: ""
+  tls:
+    enabled: true
+
+## External PostgreSQL configuration
+## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.host Database host
+## @param externalDatabase.port Database port number
+## @param externalDatabase.username Non-root username for %%COMPONENT_NAME%%
+## @param externalDatabase.password Password for the non-root username for %%COMPONENT_NAME%%
+## @param externalDatabase.database %%COMPONENT_NAME%% database name
+## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+##
+externalDatabase:
+  host: ""
+  port: 5432
+  username: %%COMPONENT_NAME%%
+  database: %%COMPONENT_NAME%%
+  password: ""
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+
+## @section SMTP Configuration
+##
+smtp:
+  ## @param smtp.host SMTP host
+  ##
+  host: ""
+  ## @param smtp.security SMTP Encryption method
+  ## Possible values:
+  ##  - starttls: explicit TLS using ports 587 or 25
+  ##  - force_tls: implicit TLS using port 465
+  ##  - off: no encryption, using port 25, unless using STARTTLS
+  ##
+  security: "starttls"
+  ## @param smtp.port SMTP port
+  ##
+  port: 587
+  ## @param smtp.from SMTP sender email address
+  ## Example: juan.delacruz@gmail.com
+  ##
+  from: ""
+  ## @param smtp.username Username for the SMTP authentication.
+  ## Example: juan
+  ##
+  username: ""
+  ## @param smtp.password Password for the SMTP service.
+  ##
+  password: ""
+  ## @param smtp.authMechanism SMTP authentication mechanism
+  ## Possible values: "Plain", "Login", "Xoauth2"
+  ## Multiple options need to be separated by a comma. (not tested)
+  ##
+  authMechanism: "Login"
+  ## @param smtp.acceptInvalidHostnames Accept Invalid Hostnames
+  ##
+  acceptInvalidHostnames: "false"
+  ## @param smtp.acceptInvalidCerts Accept Invalid Certificates
+  ##
+  acceptInvalidCerts: "false"
+  ## @param smtp.debug SMTP debugging
+  ##
+  debug: false
+## @section NetworkPolicy Configuration
+##
+## NetworkPolicy configuration for %%COMPONENT_NAME%% and PostgreSQL
+##
+networkPolicy:
+  ## @param networkPolicy.%%COMPONENT_NAME%%.enabled Enable NetworkPolicy for %%COMPONENT_NAME%%
+  ## @param networkPolicy.%%COMPONENT_NAME%%.policyTypes Policy types (Ingress, Egress)
+  ##
+  %%COMPONENT_NAME%%:
+    enabled: true
+    policyTypes:
+      - Ingress
+      - Egress
+    
+    ## Ingress rules configuration
+    ##
+    ingress:
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.enabled Allow traffic from Ingress Controller
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.namespaceSelector [object] Namespace selector for Ingress Controller
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.podSelector [object] Pod selector for Ingress Controller
+      ##
+      fromIngressController:
+        enabled: true
+        namespaceSelector:
+          kubernetes.io/metadata.name: ingress-nginx
+        podSelector:
+          app.kubernetes.io/component: controller
+          app.kubernetes.io/instance: ingress-nginx
+          app.kubernetes.io/name: ingress-nginx
+        # Alternative for Traefik:
+        # namespaceSelector:
+        #   kubernetes.io/metadata.name: traefik
+        # podSelector:
+        #   app.kubernetes.io/name: traefik
+        #   app.kubernetes.io/instance: traefik-traefik
+      
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.enabled Allow traffic from monitoring namespace
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.namespaceSelector [object] Namespace selector for monitoring
+      ## @param networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.podSelector [object] Pod selector for monitoring
+      ##
+      fromMonitoring:
+        enabled: true
+        namespaceSelector:
+          kubernetes.io/metadata.name: kube-prometheus-stack
+        podSelector:
+          app.kubernetes.io/instance: kube-prometheus-stack-prometheus
+          app.kubernetes.io/name: prometheus
+          prometheus: kube-prometheus-stack-prometheus
+    
+    ## Egress rules configuration
+    ##
+    egress:
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toPostgresql.enabled Allow traffic to PostgreSQL
+      ##
+      toPostgresql:
+        enabled: true
+      
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toDNS.enabled Allow traffic to DNS
+      ##
+      toDNS:
+        enabled: true
+      
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled Allow traffic to SMTP servers
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports [array] SMTP ports to allow
+      ##
+      toSMTP:
+        enabled: true
+        ports:
+          - 25
+          - 587
+          - 465
+      
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled Allow traffic to Internet
+      ##
+      toInternet:
+        enabled: true
+
+  ## @param networkPolicy.postgresql.enabled Enable NetworkPolicy for PostgreSQL CNPG
+  ## @param networkPolicy.postgresql.policyTypes Policy types (Ingress, Egress)
+  ##
+  postgresql:
+    enabled: true
+    policyTypes:
+      - Ingress
+      - Egress
+    
+    ## Ingress rules configuration
+    ##
+    ingress:
+      ## @param networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%.enabled Allow traffic from %%COMPONENT_NAME%%
+      ##
+      from%%COMPONENT_NAME%%:
+        enabled: true
+      
+      ## @param networkPolicy.postgresql.ingress.fromMonitoring.enabled Allow traffic from monitoring namespace
+      ## @param networkPolicy.postgresql.ingress.fromMonitoring.namespaceSelector [object] Namespace selector for monitoring
+      ## @param networkPolicy.postgresql.ingress.fromMonitoring.podSelector [object] Pod selector for monitoring
+      ##
+      fromMonitoring:
+        enabled: true
+        namespaceSelector:
+          kubernetes.io/metadata.name: kube-prometheus-stack
+        podSelector:
+          app.kubernetes.io/instance: kube-prometheus-stack-prometheus
+          app.kubernetes.io/name: prometheus
+          prometheus: kube-prometheus-stack-prometheus
+      
+      ## @param networkPolicy.postgresql.ingress.fromPostgresqlInstances.enabled Allow traffic between PostgreSQL instances
+      ##
+      fromPostgresqlInstances:
+        enabled: true
+      
+      ## @param networkPolicy.postgresql.ingress.fromCNPG.enabled Allow traffic from CNPG operator
+      ## @param networkPolicy.postgresql.ingress.fromCNPG.namespaceSelector [object] Namespace selector for CNPG operator
+      ## @param networkPolicy.postgresql.ingress.fromCNPG.podSelector [object] Pod selector for CNPG operator
+      ##
+      fromCNPG:
+        enabled: true
+        namespaceSelector:
+          kubernetes.io/metadata.name: cnpg-system
+        podSelector:
+          app.kubernetes.io/name: cloudnative-pg
+    
+    ## Egress rules configuration
+    ##
+    egress:
+      ## @param networkPolicy.postgresql.egress.toDNS.enabled Allow traffic to DNS
+      ##
+      toDNS:
+        enabled: true
+      
+      ## @param networkPolicy.postgresql.egress.toObjectStorage.enabled Allow traffic to Object Storage for backups
+      ## @param networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks CIDR blocks for Object Storage
+      ##
+      toObjectStorage:
+        enabled: false
+        cidrBlocks:
+          - 0.0.0.0/0
+      
+      ## @param networkPolicy.postgresql.egress.toPostgresqlInstances.enabled Allow traffic between PostgreSQL instances
+      ##
+      toPostgresqlInstances:
+        enabled: true
+
+## @section Auxiliary image parameters
+##
+
+## @param auxiliaryImage.registry [default: REGISTRY_NAME] Auxiliary image registry
+## @param auxiliaryImage.repository [default: REPOSITORY_NAME/postgresql] Auxiliary image repository
+## @skip auxiliaryImage.tag Auxiliary image tag (immutabe tags are recommended)
+## @param auxiliaryImage.digest Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param auxiliaryImage.pullPolicy Auxiliary image pull policy
+## @param auxiliaryImage.pullSecrets Auxiliary image pull secrets
+##
+auxiliaryImage:
+  registry: ghcr.io
+  repository: cloudnative-pg/postgresql
+  tag: 18.1-system-trixie
+  digest: ""
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
