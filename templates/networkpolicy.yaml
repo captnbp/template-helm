@@ -87,10 +87,10 @@ spec:
     {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled }}
     # Allow traffic to SMTP servers
     - to:
+        {{- range .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks }}
         - ipBlock:
-            cidr: 0.0.0.0/0
-        - ipBlock:
-            cidr: ::/0
+            cidr: {{ . }}
+        {{- end }}
       ports:
         {{- range .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports }}
         - protocol: TCP
@@ -100,10 +100,10 @@ spec:
     {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled }}
     # Allow traffic to Internet (HTTPS/HTTP)
     - to:
+        {{- range .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.cidrBlocks }}
         - ipBlock:
-            cidr: 0.0.0.0/0
-        - ipBlock:
-            cidr: ::/0
+            cidr: {{ . }}
+        {{- end }}
       ports:
         - protocol: TCP
           port: 443

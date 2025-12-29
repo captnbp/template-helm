@@ -834,6 +834,7 @@ networkPolicy:
       
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled Allow traffic to SMTP servers
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports [array] SMTP ports to allow
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks CIDR blocks to SMTP
       ##
       toSMTP:
         enabled: true
@@ -841,11 +842,18 @@ networkPolicy:
           - 25
           - 587
           - 465
+        cidrBlocks:
+          - 0.0.0.0/0
+          - ::/0
       
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled Allow traffic to Internet
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.cidrBlocks CIDR blocks to Internet
       ##
       toInternet:
         enabled: true
+        cidrBlocks:
+          - 0.0.0.0/0
+          - ::/0
 
   ## @param networkPolicy.postgresql.enabled Enable NetworkPolicy for PostgreSQL CNPG
   ## @param networkPolicy.postgresql.policyTypes Policy types (Ingress, Egress)

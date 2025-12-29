@@ -447,7 +447,9 @@ $ helm delete --purge my-release
 | `networkPolicy.%%COMPONENT_NAME%%.egress.toDNS.enabled`                            | Allow traffic to DNS                        | `true`                 |
 | `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled`                           | Allow traffic to SMTP servers               | `true`                 |
 | `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports`                             | SMTP ports to allow                         | `[]`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks`                        | CIDR blocks to SMTP                         | `["0.0.0.0/0","::/0"]` |
 | `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled`                       | Allow traffic to Internet                   | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.cidrBlocks`                    | CIDR blocks to Internet                     | `["0.0.0.0/0","::/0"]` |
 | `networkPolicy.postgresql.enabled`                                             | Enable NetworkPolicy for PostgreSQL CNPG    | `true`                 |
 | `networkPolicy.postgresql.policyTypes`                                         | Policy types (Ingress, Egress)              | `["Ingress","Egress"]` |
 | `networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%.enabled`                  | Allow traffic from %%COMPONENT_NAME%%           | `true`                 |
@@ -460,7 +462,7 @@ $ helm delete --purge my-release
 | `networkPolicy.postgresql.ingress.fromCNPG.podSelector`                        | Pod selector for CNPG operator              | `{}`                   |
 | `networkPolicy.postgresql.egress.toDNS.enabled`                                | Allow traffic to DNS                        | `true`                 |
 | `networkPolicy.postgresql.egress.toObjectStorage.enabled`                      | Allow traffic to Object Storage for backups | `false`                |
-| `networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks`                   | CIDR blocks for Object Storage              | `["0.0.0.0/0"]`        |
+| `networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks`                   | CIDR blocks for Object Storage              | `["0.0.0.0/0","::/0"]` |
 | `networkPolicy.postgresql.egress.toPostgresqlInstances.enabled`                | Allow traffic between PostgreSQL instances  | `true`                 |
 
 ### Auxiliary image parameters
