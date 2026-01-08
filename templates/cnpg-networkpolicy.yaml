@@ -16,12 +16,9 @@ spec:
       app.kubernetes.io/instance: {{ include "%%COMPONENT_NAME%%.cnp.fullname" . }}
       app.kubernetes.io/component: database
   policyTypes:
-    {{- range .Values.networkPolicy.postgresql.policyTypes }}
-    - {{ . }}
-    {{- end }}
-  {{- if has "Ingress" .Values.networkPolicy.postgresql.policyTypes }}
+    - Ingress
+    - Egress
   ingress:
-    {{- if .Values.networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%.enabled }}
     # Allow traffic from %%COMPONENT_NAME%%
     - from:
         - podSelector:
@@ -30,7 +27,6 @@ spec:
       ports:
         - protocol: TCP
           port: 5432
-    {{- end }}
     {{- if .Values.networkPolicy.postgresql.ingress.fromMonitoring.enabled }}
     # Allow traffic from monitoring namespace
     - from:
@@ -81,10 +77,7 @@ spec:
         - protocol: TCP
           port: 8000
     {{- end }}
-  {{- end }}
-  {{- if has "Egress" .Values.networkPolicy.postgresql.policyTypes }}
   egress:
-    {{- if .Values.networkPolicy.postgresql.egress.toDNS.enabled }}
     # Allow traffic to DNS
     - to:
         - namespaceSelector:
@@ -95,7 +88,6 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    {{- end }}
     {{- if and .Values.networkPolicy.postgresql.egress.toObjectStorage.enabled .Values.postgresql.backup.enabled }}
     # Allow traffic to Object Storage for backups
     - to:
@@ -107,7 +99,6 @@ spec:
         - protocol: TCP
           port: 443
     {{- end }}
-    {{- if and .Values.networkPolicy.postgresql.egress.toPostgresqlInstances.enabled (gt (int .Values.postgresql.instances) 1) }}
     # Allow traffic between PostgreSQL instances for replication
     - to:
         - podSelector:
@@ -118,6 +109,4 @@ spec:
       ports:
         - protocol: TCP
           port: 5432
-    {{- end }}
-  {{- end }}
 {{- end }}

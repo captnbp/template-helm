@@ -226,13 +226,13 @@ $ helm delete --purge my-release
 
 | Name                 | Description                                                                 | Value          |
 | -------------------- | --------------------------------------------------------------------------- | -------------- |
-| `image.registry`     | %%COMPONENT_NAME%% image registry                                               | `docker.io`    |
-| `image.repository`   | %%COMPONENT_NAME%% image repository                                             | `""`           |
-| `image.tag`          | %%COMPONENT_NAME%% image tag (immutable tags are recommended)                   | `1.21.0`       |
+| `image.registry`     | %%COMPONENT_NAME%% image registry                                                    | `docker.io`    |
+| `image.repository`   | %%COMPONENT_NAME%% image repository                                                  | `""`           |
+| `image.tag`          | %%COMPONENT_NAME%% image tag (immutable tags are recommended)                        | `1.21.0`       |
 | `image.pullPolicy`   | Image pull policy                                                           | `IfNotPresent` |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                            | `[]`           |
 | `image.debug`        | Specify if debug logs should be enabled                                     | `false`        |
-| `extraEnvVars`       | Extra environment variables to be set on %%COMPONENT_NAME%% container           | `{}`           |
+| `extraEnvVars`       | Extra environment variables to be set on %%COMPONENT_NAME%% container                | `{}`           |
 | `extraEnvVarsCM`     | ConfigMap with extra environment variables                                  | `""`           |
 | `extraEnvVarsSecret` | Secret with extra environment variables                                     | `""`           |
 | `command`            | Default container command (useful when using custom images). Use array form | `[]`           |
@@ -240,59 +240,59 @@ $ helm delete --purge my-release
 
 ### %%COMPONENT_NAME%% deployment/statefulset parameters
 
-| Name                                                | Description                                                                                                     | Value                         |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `schedulerName`                                     | Specifies the schedulerName, if it's nil uses kube-scheduler                                                    | `""`                          |
+| Name                                                | Description                                                                                                | Value                         |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `schedulerName`                                     | Specifies the schedulerName, if it's nil uses kube-scheduler                                               | `""`                          |
 | `updateStrategy.type`                               | %%COMPONENT_NAME%%warden statefulset strategy type                                                                  | `RollingUpdate`               |
 | `updateStrategy.rollingUpdate`                      | %%COMPONENT_NAME%%warden statefulset rolling update configuration parameters                                        | `{}`                          |
 | `hostAliases`                                       | %%COMPONENT_NAME%% pod host aliases                                                                                 | `[]`                          |
-| `containerPorts.http`                               | %%COMPONENT_NAME%% container port to open for %%COMPONENT_NAME%% http                                                   | `8081`                        |
-| `containerPorts.https`                              | %%COMPONENT_NAME%% container port to open for %%COMPONENT_NAME%% https                                                  | `9898`                        |
-| `podSecurityContext.enabled`                        | Enable pod Security Context                                                                                     | `true`                        |
-| `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                      | `1001`                        |
-| `podSecurityContext.seccompProfile.type`            | Type of seccomp profile to use                                                                                  | `RuntimeDefault`              |
-| `containerSecurityContext.enabled`                  | Enable container Security Context                                                                               | `true`                        |
-| `containerSecurityContext.runAsUser`                | User ID for the container                                                                                       | `0`                           |
-| `containerSecurityContext.runAsNonRoot`             | Avoid running as root User                                                                                      | `false`                       |
-| `containerSecurityContext.allowPrivilegeEscalation` | Allow privilege escalation                                                                                      | `true`                        |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Read-only root filesystem                                                                                       | `false`                       |
-| `containerSecurityContext.capabilities.drop`        | Capabilities to drop                                                                                            | `["ALL"]`                     |
-| `containerSecurityContext.capabilities.add`         | Capabilities to add                                                                                             | `["CHOWN","SETGID","SETUID"]` |
+| `containerPorts.http`                               | %%COMPONENT_NAME%% container port to open for %%COMPONENT_NAME%% http                                                        | `8081`                        |
+| `containerPorts.https`                              | %%COMPONENT_NAME%% container port to open for %%COMPONENT_NAME%% https                                                       | `9898`                        |
+| `podSecurityContext.enabled`                        | Enable pod Security Context                                                                                | `true`                        |
+| `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                 | `1001`                        |
+| `podSecurityContext.seccompProfile.type`            | Type of seccomp profile to use                                                                             | `RuntimeDefault`              |
+| `containerSecurityContext.enabled`                  | Enable container Security Context                                                                          | `true`                        |
+| `containerSecurityContext.runAsUser`                | User ID for the container                                                                                  | `0`                           |
+| `containerSecurityContext.runAsNonRoot`             | Avoid running as root User                                                                                 | `false`                       |
+| `containerSecurityContext.allowPrivilegeEscalation` | Allow privilege escalation                                                                                 | `true`                        |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Read-only root filesystem                                                                                  | `false`                       |
+| `containerSecurityContext.capabilities.drop`        | Capabilities to drop                                                                                       | `["ALL"]`                     |
+| `containerSecurityContext.capabilities.add`         | Capabilities to add                                                                                        | `["CHOWN","SETGID","SETUID"]` |
 | `podLabels`                                         | Extra labels for %%COMPONENT_NAME%% pods                                                                            | `{}`                          |
 | `podAnnotations`                                    | Annotations for %%COMPONENT_NAME%% pods                                                                             | `{}`                          |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                          |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `soft`                        |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                          |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                          | `""`                          |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                       | `[]`                          |
-| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                           | `{}`                          |
-| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                        | `{}`                          |
-| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                        | `[]`                          |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                          |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `soft`                        |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                          |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                     | `""`                          |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                  | `[]`                          |
+| `affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                      | `{}`                          |
+| `nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                   | `{}`                          |
+| `tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                   | `[]`                          |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for %%COMPONENT_NAME%% pods assignment spread across your cluster among failure-domains | `[]`                          |
 | `priorityClassName`                                 | %%COMPONENT_NAME%% pods' priorityClassName                                                                          | `""`                          |
 | `resources.limits`                                  | The resources limits for the %%COMPONENT_NAME%% container                                                           | `{}`                          |
 | `resources.requests`                                | The requested resources for the %%COMPONENT_NAME%% container                                                        | `{}`                          |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                            | `false`                       |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                         | `5`                           |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                | `5`                           |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                               | `5`                           |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                             | `5`                           |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                             | `1`                           |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                           | `true`                        |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                        | `5`                           |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                               | `5`                           |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                              | `1`                           |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                            | `5`                           |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                            | `1`                           |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                                             | `false`                       |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                          | `0`                           |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                 | `10`                          |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                | `5`                           |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                              | `60`                          |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                              | `1`                           |
-| `customLivenessProbe`                               | Override default liveness probe                                                                                 | `{}`                          |
-| `customReadinessProbe`                              | Override default readiness probe                                                                                | `{}`                          |
-| `customStartupProbe`                                | Override default startup probe                                                                                  | `{}`                          |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                       | `false`                       |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                    | `5`                           |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                           | `5`                           |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                          | `5`                           |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                        | `5`                           |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                        | `1`                           |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                      | `true`                        |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                   | `5`                           |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                          | `5`                           |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                         | `1`                           |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                       | `5`                           |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                       | `1`                           |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                        | `false`                       |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                     | `0`                           |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                            | `10`                          |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                           | `5`                           |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                         | `60`                          |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                         | `1`                           |
+| `customLivenessProbe`                               | Override default liveness probe                                                                            | `{}`                          |
+| `customReadinessProbe`                              | Override default readiness probe                                                                           | `{}`                          |
+| `customStartupProbe`                                | Override default startup probe                                                                             | `{}`                          |
 | `lifecycleHooks`                                    | for the %%COMPONENT_NAME%% container(s) to automate configuration before or after startup                           | `{}`                          |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for %%COMPONENT_NAME%% pods                                     | `[]`                          |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for %%COMPONENT_NAME%% container(s)                        | `[]`                          |
@@ -304,24 +304,24 @@ $ helm delete --purge my-release
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                     | Kubernetes service type                                                                                                          | `ClusterIP`              |
-| `service.ports.http`               | %%COMPONENT_NAME%% service HTTP port                                                                                                 | `8200`                   |
-| `service.ports.https`              | %%COMPONENT_NAME%% service HTTPS port                                                                                                | `8201`                   |
+| `service.ports.http`               | %%COMPONENT_NAME%% service HTTP port                                                                                                      | `8200`                   |
+| `service.ports.https`              | %%COMPONENT_NAME%% service HTTPS port                                                                                                     | `8201`                   |
 | `service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types.                                                     | `{}`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.clusterIP`                | %%COMPONENT_NAME%% service clusterIP IP                                                                                              | `""`                     |
+| `service.clusterIP`                | %%COMPONENT_NAME%% service clusterIP IP                                                                                                   | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP for the SuiteCRM Service (optional, cloud specific)                                                               | `""`                     |
 | `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for %%COMPONENT_NAME%% service                                                                         | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on %%COMPONENT_NAME%% service                                                                                   | `[]`                     |
-| `service.extraHeadlessPorts`       | Extra ports to expose on %%COMPONENT_NAME%% headless service                                                                         | `[]`                     |
+| `service.annotations`              | Additional custom annotations for %%COMPONENT_NAME%% service                                                                              | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on %%COMPONENT_NAME%% service                                                                                        | `[]`                     |
+| `service.extraHeadlessPorts`       | Extra ports to expose on %%COMPONENT_NAME%% headless service                                                                              | `[]`                     |
 | `service.ipFamilyPolicy`           | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                     | `PreferDualStack`        |
 | `service.ipFamilies`               | Controller Service ipFamilies (optional, cloud specific)                                                                         | `["IPv6","IPv4"]`        |
-| `ingress.enabled`                  | Enable ingress record generation for %%COMPONENT_NAME%%                                                                              | `true`                   |
+| `ingress.enabled`                  | Enable ingress record generation for %%COMPONENT_NAME%%                                                                                   | `true`                   |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `%%COMPONENT_NAME%%.local`   |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `%%COMPONENT_NAME%%.local`        |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `traefik`                |
 | `ingress.ingressControllerType`    | ingressControllerType that will be be used to implement the Ingress specific annotations (Ex. nginx or traefik)                  | `traefik`                |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
@@ -336,24 +336,24 @@ $ helm delete --purge my-release
 
 ### RBAC parameter
 
-| Name                                          | Description                                                           | Value   |
-| --------------------------------------------- | --------------------------------------------------------------------- | ------- |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
 | `serviceAccount.create`                       | Enable the creation of a ServiceAccount for %%COMPONENT_NAME%%warden pods | `true`  |
-| `serviceAccount.name`                         | Name of the created ServiceAccount                                    | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                       | `false` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                  | `{}`    |
+| `serviceAccount.name`                         | Name of the created ServiceAccount                               | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                  | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount             | `{}`    |
 
 ### Persistence parameters
 
-| Name                        | Description                                                              | Value               |
-| --------------------------- | ------------------------------------------------------------------------ | ------------------- |
+| Name                        | Description                                                         | Value               |
+| --------------------------- | ------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`       | Enable %%COMPONENT_NAME%% data persistence using PVC. If false, use emptyDir | `true`              |
 | `persistence.storageClass`  | PVC Storage Class for %%COMPONENT_NAME%% data volume                         | `""`                |
-| `persistence.mountPath`     | Data volume mount path                                                   | `/data`             |
+| `persistence.mountPath`     | Data volume mount path                                              | `/data`             |
 | `persistence.accessModes`   | PVC Access Modes for %%COMPONENT_NAME%% data volume                          | `["ReadWriteOnce"]` |
 | `persistence.size`          | PVC Storage Request for %%COMPONENT_NAME%% data volume                       | `8Gi`               |
-| `persistence.annotations`   | Annotations for the PVC                                                  | `{}`                |
-| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)               | `""`                |
+| `persistence.annotations`   | Annotations for the PVC                                             | `{}`                |
+| `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)          | `""`                |
 
 ### Global TLS settings for internal CA
 
@@ -362,8 +362,8 @@ $ helm delete --purge my-release
 | `tls.enabled`                      | Enable internal TLS between Ingress controller and unifi                                   | `true`            |
 | `tls.autoGenerated`                | Create cert-manager signed TLS certificates.                                               | `true`            |
 | `tls.existingSecret`               | Existing secret containing the certificates for Unifi                                      | `""`              |
-| `tls.subject.organizationalUnits`  | Subject's organizational units                                                             | `%%COMPONENT_NAME%%`  |
-| `tls.subject.organizations`        | Subject's organization                                                                     | `%%COMPONENT_NAME%%`  |
+| `tls.subject.organizationalUnits`  | Subject's organizational units                                                             | `%%COMPONENT_NAME%%`       |
+| `tls.subject.organizations`        | Subject's organization                                                                     | `%%COMPONENT_NAME%%`       |
 | `tls.subject.countries`            | Subject's country                                                                          | `fr`              |
 | `tls.issuerRef.existingIssuerName` | Existing name of the cert-manager http issuer. If provided, it won't create a default one. | `""`              |
 | `tls.issuerRef.kind`               | Kind of the cert-manager issuer resource (defaults to "Issuer")                            | `Issuer`          |
@@ -388,33 +388,33 @@ $ helm delete --purge my-release
 
 ### Database parameters
 
-| Name                                         | Description                                                             | Value            |
-| -------------------------------------------- | ----------------------------------------------------------------------- | ---------------- |
-| `postgresql.enabled`                         | Enable CloudNativePG cluster deployment                                 | `false`          |
-| `postgresql.instances`                       | Number of PostgreSQL instances (1 for single instance)                  | `1`              |
-| `postgresql.parameters`                      | Postgresql parameters                                                   | `{}`             |
-| `postgresql.storage.size`                    | Storage size for PostgreSQL data                                        | `10Gi`           |
-| `postgresql.storage.storageClass`            | Storage class for PostgreSQL PVCs                                       | `""`             |
-| `postgresql.storage.pvcTemplate`             | Additional PVC template configuration for PostgreSQL PVCs               | `{}`             |
+| Name                                         | Description                                                             | Value       |
+| -------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| `postgresql.enabled`                         | Enable CloudNativePG cluster deployment                                 | `false`     |
+| `postgresql.instances`                       | Number of PostgreSQL instances (1 for single instance)                  | `1`         |
+| `postgresql.parameters`                      | Postgresql parameters                                                   | `{}`        |
+| `postgresql.storage.size`                    | Storage size for PostgreSQL data                                        | `10Gi`      |
+| `postgresql.storage.storageClass`            | Storage class for PostgreSQL PVCs                                       | `""`        |
+| `postgresql.storage.pvcTemplate`             | Additional PVC template configuration for PostgreSQL PVCs               | `{}`        |
 | `postgresql.database.name`                   | Database name                                                           | `%%COMPONENT_NAME%%` |
 | `postgresql.database.username`               | Database username                                                       | `%%COMPONENT_NAME%%` |
-| `postgresql.database.existingSecret`         | Existing secret with database credentials                               | `""`             |
-| `postgresql.resources`                       | Resource requests and limits for PostgreSQL pod                         | `{}`             |
-| `postgresql.affinity`                        | Affinity configuration for PostgreSQL pod                               | `{}`             |
-| `postgresql.tolerations`                     | Tolerations for PostgreSQL pod                                          | `{}`             |
-| `postgresql.nodeSelector`                    | Node selector for PostgreSQL pod                                        | `{}`             |
-| `postgresql.monitoring.enabled`              | Enable monitoring with PodMonitor                                       | `true`           |
-| `postgresql.backup.enabled`                  | Enable Barman plugin WAL backup configuration                           | `false`          |
-| `postgresql.backup.barmanObjectName`         | Barman ObjectStore name for backup                                      | `""`             |
-| `postgresql.superuserSecret`                 | Secret containing superuser credentials for the cluster                 | `""`             |
-| `postgresql.tls.enabled`                     | Enable TLS encryption for the cluster (requires cert-manager)           | `true`           |
-| `externalDatabase.host`                      | Database host                                                           | `""`             |
-| `externalDatabase.port`                      | Database port number                                                    | `5432`           |
-| `externalDatabase.username`                  | Non-root username for %%COMPONENT_NAME%%                                    | `%%COMPONENT_NAME%%` |
-| `externalDatabase.password`                  | Password for the non-root username for %%COMPONENT_NAME%%                   | `""`             |
-| `externalDatabase.database`                  | %%COMPONENT_NAME%% database name                                            | `%%COMPONENT_NAME%%` |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`             |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`             |
+| `postgresql.database.existingSecret`         | Existing secret with database credentials                               | `""`        |
+| `postgresql.resources`                       | Resource requests and limits for PostgreSQL pod                         | `{}`        |
+| `postgresql.affinity`                        | Affinity configuration for PostgreSQL pod                               | `{}`        |
+| `postgresql.tolerations`                     | Tolerations for PostgreSQL pod                                          | `{}`        |
+| `postgresql.nodeSelector`                    | Node selector for PostgreSQL pod                                        | `{}`        |
+| `postgresql.monitoring.enabled`              | Enable monitoring with PodMonitor                                       | `true`      |
+| `postgresql.backup.enabled`                  | Enable Barman plugin WAL backup configuration                           | `false`     |
+| `postgresql.backup.barmanObjectName`         | Barman ObjectStore name for backup                                      | `""`        |
+| `postgresql.superuserSecret`                 | Secret containing superuser credentials for the cluster                 | `""`        |
+| `postgresql.tls.enabled`                     | Enable TLS encryption for the cluster (requires cert-manager)           | `true`      |
+| `externalDatabase.host`                      | Database host                                                           | `""`        |
+| `externalDatabase.port`                      | Database port number                                                    | `5432`      |
+| `externalDatabase.username`                  | Non-root username for %%COMPONENT_NAME%%                                       %%COMPONENT_NAME%%ooooo` |
+| `externalDatabase.password`                  | Password for the non-root username for %%COMPONENT_NAME%%                        | `""`        |
+| `externalDatabase.database`                  | %%COMPONENT_NAME%% database name                                               %%COMPONENT_NAME%%ooooo` |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`        |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`        |
 
 ### SMTP Configuration
 
@@ -433,37 +433,31 @@ $ helm delete --purge my-release
 
 ### NetworkPolicy Configuration
 
-| Name                                                                           | Description                                 | Value                  |
-| ------------------------------------------------------------------------------ | ------------------------------------------- | ---------------------- |
-| `networkPolicy.%%COMPONENT_NAME%%.enabled`                                         | Enable NetworkPolicy for %%COMPONENT_NAME%%     | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.policyTypes`                                     | Policy types (Ingress, Egress)              | `["Ingress","Egress"]` |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.enabled`           | Allow traffic from Ingress Controller       | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.namespaceSelector` | Namespace selector for Ingress Controller   | `{}`                   |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.podSelector`       | Pod selector for Ingress Controller         | `{}`                   |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.enabled`                  | Allow traffic from monitoring namespace     | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.namespaceSelector`        | Namespace selector for monitoring           | `{}`                   |
-| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.podSelector`              | Pod selector for monitoring                 | `{}`                   |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toPostgresql.enabled`                     | Allow traffic to PostgreSQL                 | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toDNS.enabled`                            | Allow traffic to DNS                        | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled`                           | Allow traffic to SMTP servers               | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports`                             | SMTP ports to allow                         | `[]`                   |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks`                        | CIDR blocks to SMTP                         | `["0.0.0.0/0","::/0"]` |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled`                       | Allow traffic to Internet                   | `true`                 |
-| `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.cidrBlocks`                    | CIDR blocks to Internet                     | `["0.0.0.0/0","::/0"]` |
-| `networkPolicy.postgresql.enabled`                                             | Enable NetworkPolicy for PostgreSQL CNPG    | `true`                 |
-| `networkPolicy.postgresql.policyTypes`                                         | Policy types (Ingress, Egress)              | `["Ingress","Egress"]` |
-| `networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%.enabled`                  | Allow traffic from %%COMPONENT_NAME%%           | `true`                 |
-| `networkPolicy.postgresql.ingress.fromMonitoring.enabled`                      | Allow traffic from monitoring namespace     | `true`                 |
-| `networkPolicy.postgresql.ingress.fromMonitoring.namespaceSelector`            | Namespace selector for monitoring           | `{}`                   |
-| `networkPolicy.postgresql.ingress.fromMonitoring.podSelector`                  | Pod selector for monitoring                 | `{}`                   |
-| `networkPolicy.postgresql.ingress.fromPostgresqlInstances.enabled`             | Allow traffic between PostgreSQL instances  | `true`                 |
-| `networkPolicy.postgresql.ingress.fromCNPG.enabled`                            | Allow traffic from CNPG operator            | `true`                 |
-| `networkPolicy.postgresql.ingress.fromCNPG.namespaceSelector`                  | Namespace selector for CNPG operator        | `{}`                   |
-| `networkPolicy.postgresql.ingress.fromCNPG.podSelector`                        | Pod selector for CNPG operator              | `{}`                   |
-| `networkPolicy.postgresql.egress.toDNS.enabled`                                | Allow traffic to DNS                        | `true`                 |
-| `networkPolicy.postgresql.egress.toObjectStorage.enabled`                      | Allow traffic to Object Storage for backups | `false`                |
-| `networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks`                   | CIDR blocks for Object Storage              | `["0.0.0.0/0","::/0"]` |
-| `networkPolicy.postgresql.egress.toPostgresqlInstances.enabled`                | Allow traffic between PostgreSQL instances  | `true`                 |
+| Name                                                                      | Description                                                                        | Value                  |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `networkPolicy.%%COMPONENT_NAME%%.enabled`                                         | Enable NetworkPolicy for %%COMPONENT_NAME%%                                                 | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.enabled`           | Allow traffic from Ingress Controller                                              | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.namespaceSelector` | Namespace selector for Ingress Controller                                          | `{}`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromIngressController.podSelector`       | Pod selector for Ingress Controller                                                | `{}`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.enabled`                  | Allow traffic from monitoring namespace                                            | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.namespaceSelector`        | Namespace selector for monitoring                                                  | `{}`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.ingress.fromMonitoring.podSelector`              | Pod selector for monitoring                                                        | `{}`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled`                           | Allow traffic to SMTP servers                                                      | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports`                             | SMTP ports to allow                                                                | `[]`                   |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks`                        | CIDR blocks to SMTP                                                                | `["0.0.0.0/0","::/0"]` |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.enabled`                       | Allow traffic to Internet                                                          | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.toInternet.cidrBlocks`                    | CIDR blocks to Internet                                                            | `["0.0.0.0/0","::/0"]` |
+| `networkPolicy.%%COMPONENT_NAME%%.egress.extraEgress`                              | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true) | `[]`                   |
+| `networkPolicy.%%COMPONENT_NAME%%l.enabled`                                        | Enable NetworkPolicy for PostgreSQL CNPG                                           | `true`                 |
+| `networkPolicy.%%COMPONENT_NAME%%l.ingress.fromMonitoring.enabled`                 | Allow traffic from monitoring namespace                                            | `true`                 |
+| `networkPolicy.postgresql.ingress.fromMonitoring.namespaceSelector`       | Namespace selector for monitoring                                                  | `{}`                   |
+| `networkPolicy.postgresql.ingress.fromMonitoring.podSelector`             | Pod selector for monitoring                                                        | `{}`                   |
+| `networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%lInstances.enabled`        | Allow traffic betwe%%COMPONENT_NAME%%eSQL instances                                         | `true`                 |
+| `networkPolicy.postgresql.ingress.fromCNPG.enabled`                       | Allow traffic from CNPG operator                                                   | `true`                 |
+| `networkPolicy.postgresql.ingress.fromCNPG.namespaceSelector`             | Namespace selector for CNPG operator                                               | `{}`                   |
+| `networkPolicy.postgresql.ingress.fromCNPG.podSelector`                   | Pod selector for CNPG operator                                                     | `{}`                   |
+| `networkPolicy.postgresql.egress.toObjectStorage.enabled`                 | Allow traffic to Object Storage for backups                                        | `false`                |
+| `networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks`              | CIDR blocks for Object Storage                                                     | `["0.0.0.0/0","::/0"]` |
 
 ### Auxiliary image parameters
 
@@ -485,4 +479,5 @@ This Helm chart was created and is being maintained by @captnbp.
 
 ### Credits
 
-- The `%%COMPONENT_NAME%%` project can be found [here](https://github.com/%%COMPONENT_NAME%%)
+- The `foooooooo` project can be found [here](https://github.com/foooooooo)
+%%COMPONENT_NAME%%%%COMPONENT_NAME%%

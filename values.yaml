@@ -776,13 +776,9 @@ smtp:
 ##
 networkPolicy:
   ## @param networkPolicy.%%COMPONENT_NAME%%.enabled Enable NetworkPolicy for %%COMPONENT_NAME%%
-  ## @param networkPolicy.%%COMPONENT_NAME%%.policyTypes Policy types (Ingress, Egress)
   ##
   %%COMPONENT_NAME%%:
     enabled: true
-    policyTypes:
-      - Ingress
-      - Egress
     
     ## Ingress rules configuration
     ##
@@ -822,16 +818,6 @@ networkPolicy:
     ## Egress rules configuration
     ##
     egress:
-      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toPostgresql.enabled Allow traffic to PostgreSQL
-      ##
-      toPostgresql:
-        enabled: true
-      
-      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toDNS.enabled Allow traffic to DNS
-      ##
-      toDNS:
-        enabled: true
-      
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled Allow traffic to SMTP servers
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.ports [array] SMTP ports to allow
       ## @param networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.cidrBlocks CIDR blocks to SMTP
@@ -854,24 +840,32 @@ networkPolicy:
         cidrBlocks:
           - 0.0.0.0/0
           - ::/0
+      ## @param networkPolicy.%%COMPONENT_NAME%%.egress.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+      ## e.g:
+      ## extraEgress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     to:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      ##
+      extraEgress: []
 
   ## @param networkPolicy.postgresql.enabled Enable NetworkPolicy for PostgreSQL CNPG
-  ## @param networkPolicy.postgresql.policyTypes Policy types (Ingress, Egress)
   ##
   postgresql:
     enabled: true
-    policyTypes:
-      - Ingress
-      - Egress
     
     ## Ingress rules configuration
     ##
-    ingress:
-      ## @param networkPolicy.postgresql.ingress.from%%COMPONENT_NAME%%.enabled Allow traffic from %%COMPONENT_NAME%%
-      ##
-      from%%COMPONENT_NAME%%:
-        enabled: true
-      
+    ingress:      
       ## @param networkPolicy.postgresql.ingress.fromMonitoring.enabled Allow traffic from monitoring namespace
       ## @param networkPolicy.postgresql.ingress.fromMonitoring.namespaceSelector [object] Namespace selector for monitoring
       ## @param networkPolicy.postgresql.ingress.fromMonitoring.podSelector [object] Pod selector for monitoring
@@ -904,11 +898,6 @@ networkPolicy:
     ## Egress rules configuration
     ##
     egress:
-      ## @param networkPolicy.postgresql.egress.toDNS.enabled Allow traffic to DNS
-      ##
-      toDNS:
-        enabled: true
-      
       ## @param networkPolicy.postgresql.egress.toObjectStorage.enabled Allow traffic to Object Storage for backups
       ## @param networkPolicy.postgresql.egress.toObjectStorage.cidrBlocks CIDR blocks for Object Storage
       ##
@@ -917,11 +906,6 @@ networkPolicy:
         cidrBlocks:
           - 0.0.0.0/0
           - ::/0
-      
-      ## @param networkPolicy.postgresql.egress.toPostgresqlInstances.enabled Allow traffic between PostgreSQL instances
-      ##
-      toPostgresqlInstances:
-        enabled: true
 
 ## @section Auxiliary image parameters
 ##
