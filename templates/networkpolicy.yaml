@@ -116,7 +116,7 @@ spec:
         {{- end }}
     {{- end }}
 
-    {{- if .Values.%%COMPONENT_NAME%%.networkPolicy.egress.extraEgress }}
+    {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.%%COMPONENT_NAME%%.networkPolicy.egress.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}
