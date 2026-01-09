@@ -99,8 +99,7 @@ spec:
             cidr: {{ . }}
         {{- end }}
       ports:
-        - protocol: TCP
-        - protocol: UDP
+        {{- include "common.tplvalues.render" ( dict "value" .Values.%%COMPONENT_NAME%%.networkPolicy.egress.toInternet.ports "context" $ ) | nindent 8 }}
     {{- end }}
     {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.toSMTP.enabled }}
     # Allow traffic to SMTP servers
