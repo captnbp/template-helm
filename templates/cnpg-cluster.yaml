@@ -2,7 +2,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: {{ include "%%COMPONENT_NAME%%.cnp.fullname" . }}
+  name: {{ include "%%COMPONENT_NAME%%.postgresql.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: database
@@ -23,7 +23,7 @@ spec:
       database: {{ .Values.postgresql.database.name | quote }}
       owner: {{ .Values.postgresql.database.user | quote }}
       secret:
-        name: {{ include "%%COMPONENT_NAME%%.cnp.secretName" . }}
+        name: {{ include "%%COMPONENT_NAME%%.postgresql.secretName" . }}
   
   storage:
     size: {{ .Values.postgresql.storage.size | quote }}
@@ -72,7 +72,7 @@ spec:
 
   {{- if .Values.postgresql.tls.enabled }}
   certificates:
-    serverTLSSecret: {{ include "%%COMPONENT_NAME%%.cnp.fullname" . }}-crt
-    serverCASecret: {{ include "%%COMPONENT_NAME%%.cnp.fullname" . }}-crt
+    serverTLSSecret: {{ include "%%COMPONENT_NAME%%.postgresql.fullname" . }}-crt
+    serverCASecret: {{ include "%%COMPONENT_NAME%%.postgresql.fullname" . }}-crt
   {{- end }}
 {{- end }}

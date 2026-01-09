@@ -60,7 +60,7 @@ Return the TLS secret name
 {{/*
 Return the CNP cluster fullname
 */}}
-{{- define "%%COMPONENT_NAME%%.cnp.fullname" -}}
+{{- define "%%COMPONENT_NAME%%.postgresql.fullname" -}}
 {{- if .Values.postgresql.name -}}
 {{- .Values.postgresql.name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -71,30 +71,30 @@ Return the CNP cluster fullname
 {{/*
 Return the CNP cluster service name (read-write)
 */}}
-{{- define "%%COMPONENT_NAME%%.cnp.serviceName" -}}
-{{- printf "%s-rw" (include "%%COMPONENT_NAME%%.cnp.fullname" .) -}}
+{{- define "%%COMPONENT_NAME%%.postgresql.serviceName" -}}
+{{- printf "%s-rw" (include "%%COMPONENT_NAME%%.postgresql.fullname" .) -}}
 {{- end -}}
 
 {{/*
 Return the CNP secret name
 */}}
-{{- define "%%COMPONENT_NAME%%.cnp.secretName" -}}
+{{- define "%%COMPONENT_NAME%%.postgresql.secretName" -}}
 {{- if .Values.postgresql.database.existingSecret -}}
 {{- .Values.postgresql.database.existingSecret -}}
 {{- else -}}
-{{- printf "%s-app" (include "%%COMPONENT_NAME%%.cnp.fullname" .) -}}
+{{- printf "%s-app" (include "%%COMPONENT_NAME%%.postgresql.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the CNP database password
 */}}
-{{- define "%%COMPONENT_NAME%%.cnp.password" -}}
-{{- $secretData := (lookup "v1" "Secret" $.Release.Namespace (include "%%COMPONENT_NAME%%.cnp.secretName" .)).data }}
+{{- define "%%COMPONENT_NAME%%.postgresql.password" -}}
+{{- $secretData := (lookup "v1" "Secret" $.Release.Namespace (include "%%COMPONENT_NAME%%.postgresql.secretName" .)).data }}
 {{- if and $secretData (hasKey $secretData "password") }}
 {{- index $secretData "password" | b64dec }}
 {{- else }}
-{{- randAlphaNum 16 }}
+{{- randAlphaNum 32 }}
 {{- end }}
 {{- end -}}
 
@@ -105,7 +105,7 @@ Get the database host
 {{- if .Values.postgresql.enabled -}}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
-{{- $serviceName := include "%%COMPONENT_NAME%%.cnp.serviceName" . }}
+{{- $serviceName := include "%%COMPONENT_NAME%%.postgresql.serviceName" . }}
 {{- printf "%s.%s.svc.%s" $serviceName $releaseNamespace $clusterDomain -}}
 {{- else -}}
 {{- .Values.externalDatabase.host -}}
@@ -150,7 +150,7 @@ Get the Postgresql credentials secret.
 */}}
 {{- define "%%COMPONENT_NAME%%.databaseSecretName" -}}
 {{- if .Values.postgresql.enabled -}}
-{{- include "%%COMPONENT_NAME%%.cnp.secretName" . -}}
+{{- include "%%COMPONENT_NAME%%.postgresql.secretName" . -}}
 {{- else -}}
 {{- default (printf "%s-externaldb" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
