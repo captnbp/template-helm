@@ -20,8 +20,8 @@ spec:
   
   bootstrap:
     initdb:
-      database: {{ .Values.postgresql.database.name | quote }}
-      owner: {{ .Values.postgresql.database.user | quote }}
+      database: {{ include "%%COMPONENT_NAME%%.database.name" . | quote }}
+      owner: {{ include "%%COMPONENT_NAME%%.database.username" . | quote }}
       secret:
         name: {{ include "%%COMPONENT_NAME%%.postgresql.secretName" . }}
   

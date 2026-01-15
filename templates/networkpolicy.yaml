@@ -114,7 +114,17 @@ spec:
           port: {{ . }}
         {{- end }}
     {{- end }}
-
+    {{- if and .Values.networkPolicy.postgresql.enabled .Values.postgresql.enabled }}
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: {{ include "%%COMPONENT_NAME%%.postgresql.fullname" . }}
+              app.kubernetes.io/component: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    {{- end }}
     {{- if .Values.networkPolicy.%%COMPONENT_NAME%%.egress.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.%%COMPONENT_NAME%%.networkPolicy.egress.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
